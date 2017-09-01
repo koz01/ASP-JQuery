@@ -29,7 +29,71 @@
                 }
             });
 
-        })
+            classDDL.change(function () {
+                if($(this).val() == "-1")
+                {
+                    CategoryDDL.empty();
+                    BookDDL.empty();
+                    classDDL.append($('<option/>', { value: -1, text: 'Select Class Name' }));
+                    CategoryDDL.append($('<option/>', { value: -1, text: 'Select Category' }));
+
+                    classDDL.val('-1');
+                    CategoryDDL.val('-1');
+                    CategoryDDL.prop('disabled', true);
+                    BookDDL.prop('disabled', true);
+                }
+                else {
+
+                    $.ajax({
+                        url: 'WebService1.asmx/getCategory',
+                        method: 'post',
+                        data: {classID: $(this).val()},
+                        dataType: 'json',
+                        success: function (data) {
+                            CategoryDDL.empty();
+                            CategoryDDL.append($('<option/>', { value: -1, text: 'Select Category' }));                  
+                            CategoryDDL.prop('disabled', false);
+                            $(data).each(function (index, item) {
+                                CategoryDDL.append($('<option/>', { value: item.CategoryId, text: item.CategoryName }));
+                            });
+                        }
+                    });
+                }
+
+            });
+
+
+            CategoryDDL.change(function () {
+                if ($(this).val() == "-1") {
+                    BookDDL.empty();
+                    BookDDL.append($('<option/>', { value: -1, text: 'Select Category' }));
+                    BookDDL.val('-1');
+                    BookDDL.prop('disabled', true);
+                }
+                else {
+
+                    $.ajax({
+                        url: 'WebService1.asmx/getBookName',
+                        method: 'post',
+                        data: { categoryID: $(this).val() },
+                        dataType: 'json',
+                        success: function (data) {
+                            BookDDL.empty();
+                            BookDDL.append($('<option/>', { value: -1, text: 'Select Category' }));
+                            BookDDL.prop('disabled', false);
+                            $(data).each(function (index, item) {
+                                BookDDL.append($('<option/>', { value: item.BookID, text: item.BookName }));
+                            });
+                        }
+                    });
+                }
+
+            });
+
+        });
+
+        
+
     </script>
 
     <style>
